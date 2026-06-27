@@ -24,15 +24,30 @@ COMMANDS = [
     },
     {
         'action': 'find_file',
-        'keywords': ['tìm file', 'tim file', 'mở file', 'mo file', 'tìm kiếm file'],
+        'keywords': ['tìm file', 'tim file', 'tìm kiếm file'],
         'description': 'Tìm và mở file PowerPoint'
     },
     {
+        'action': 'select_file',
+        'keywords': ['số', 'so','một', 'mot', 'hai', 'ba', 'bốn', 'bon', 'tư', 'tu', 'năm', 'nam', 
+                    'sáu', 'sau', 'bảy', 'bay', 'tám', 'tam', 'chín', 'chin'],
+        'description': 'Chọn slide theo số (1-9)'
+    },
+    {
+        'action': 'open_selected_file',
+        'keywords': ['mở file', 'mo file', 'mở tệp'],
+        'description': 'Mở file PowerPoint đã chọn'
+    },
+    {
         'action': 'goto_slide',
-        'keywords': ['một', 'mot', 'hai', 'ba', 'bốn', 'bon', 'tư', 'tu', 'năm', 'nam', 
-                    'sáu', 'sau', 'bảy', 'bay', 'tám', 'tam', 'chín', 'chin',
-                    'slide'],
-        'description': 'Chuyển đến slide theo số (1-9)'
+        'keywords': [
+            'slide',
+            'trang',
+            'đến slide',
+            'toi slide',
+            'chuyển slide'
+        ],
+        'description': 'Chuyển tới slide'
     },
     {
         'action': 'start_slideshow',
@@ -50,8 +65,13 @@ COMMANDS = [
         'description': 'Quay lại slide trước'
     },
     {
-        'action': 'exit',
-        'keywords': ['thoát', 'thoat', 'dừng', 'dung', 'kết thúc', 'ket thuc', 'exit', 'quit'],
+        'action': 'exit_slideshow',
+        'keywords': ['thoát', 'thoat', 'dừng', 'dung', 'kết thúc', 'ket thuc'],
+        'description': 'Thoát trình chiếu và đóng PowerPoint'
+    },
+    {
+        'action': 'close_program',
+        'keywords': ['tắt', 'tat', 'tắt chương trình', 'tat chuong trinh', 'đóng', 'dong', 'đóng chương trình', 'dong chuong trinh', 'thoát chương trình', 'thoat chuong trinh'],
         'description': 'Thoát chương trình'
     }
 ]
@@ -61,4 +81,16 @@ LOGGING_CONFIG = {
     'log_file': 'app.log',
     'log_level': 'INFO',
     'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+}
+
+NUMBER_WORDS = {
+    'một': 1, 'mot': 1, '1': 1,
+    'hai': 2, '2': 2,
+    'ba': 3, '3': 3,
+    'bốn': 4, 'bon': 4, 'tư': 4, 'tu': 4, '4': 4,
+    'năm': 5, 'nam': 5, '5': 5,
+    'sáu': 6, 'sau': 6, '6': 6,
+    'bảy': 7, 'bay': 7, 'bẩy': 7, '7': 7,
+    'tám': 8, 'tam': 8, '8': 8,
+    'chín': 9, 'chin': 9, '9': 9
 }

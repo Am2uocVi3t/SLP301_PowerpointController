@@ -21,20 +21,53 @@ def main():
         command_parser = CommandParser()
         ppt_controller = PowerPointController()
         
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("🎤 SPEECH POWERPOINT CONTROLLER")
-        print("="*60)
-        print("\nCác lệnh hỗ trợ:")
-        print("  - 'mở powerpoint' : Mở ứng dụng PowerPoint")
-        print("  - 'tìm file'      : Tìm và mở file PowerPoint")
-        print("  - 'một/hai/ba'    : Chuyển đến slide 1/2/3")
-        print("  - 'trình chiếu'   : Bắt đầu trình chiếu")
-        print("  - 'tiếp tục'      : Chuyển slide tiếp theo")
-        print("  - 'lùi lại'       : Quay lại slide trước")
-        print("  - 'thoát'         : Thoát chương trình")
-        print("\n" + "="*60)
-        print("Sẵn sàng nhận lệnh giọng nói...")
-        print("="*60 + "\n")
+        print("=" * 60)
+
+        print("\n📌 QUY TRÌNH SỬ DỤNG")
+
+        print("\n【Khởi động】")
+        print("  • 'mở powerpoint'")
+        print("    → Mở ứng dụng Microsoft PowerPoint.")
+
+        print("\n【Mở bài thuyết trình】")
+        print("  • 'tìm file'")
+        print("    → Hiển thị danh sách file PowerPoint trong thư mục presentations.")
+        print("  • 'số 1', 'số 2', ...")
+        print("    → Chọn file theo số thứ tự.")
+        print("  • 'mở file'")
+        print("    → Mở file PowerPoint đã chọn.")
+
+        print("\n【Điều khiển trình chiếu】")
+        print("  • 'trình chiếu'")
+        print("    → Bắt đầu chế độ Slide Show.")
+        print("  • 'slide 5'")
+        print("    → Chuyển đến slide số 5.")
+        print("  • 'tiếp tục'")
+        print("    → Chuyển sang slide tiếp theo.")
+        print("  • 'lùi lại'")
+        print("    → Quay về slide trước.")
+        print("  • 'thoát'")
+        print("    → Thoát chế độ trình chiếu.")
+
+        print("\n【Kết thúc】")
+        print("  • 'tắt chương trình'")
+        print("    → Đóng PowerPoint và kết thúc ứng dụng.")
+
+        print("\n📌 LƯU Ý")
+        print("  • Sau 'tìm file' hãy nói: 'số <n>' để chọn file.")
+        print("  • Sau khi chọn file, hãy nói: 'mở file'.")
+        print("  • Sau khi mở file, hãy nói: 'trình chiếu'.")
+        print("  • Muốn chuyển slide, hãy nói: 'slide <n>'.")
+        print("  • 'số <n>' dùng để CHỌN FILE.")
+        print("  • 'slide <n>' dùng để CHUYỂN SLIDE.")
+        print("  • Muốn kết thúc Slide Show hãy nói: 'thoát'.")
+        print("  • Muốn đóng hoàn toàn chương trình hãy nói: 'tắt chương trình'.")
+
+        print("\n" + "=" * 60)
+        print("🎯 Sẵn sàng nhận lệnh giọng nói...")
+        print("=" * 60 + "\n")
         
         # Vòng lặp chính
         while True:
@@ -61,7 +94,8 @@ def main():
                         print(f"❌ {result['message']}")
                     
                     # Kiểm tra lệnh thoát
-                    if command['action'] == 'exit':
+                    if command['action'] == 'close_program':
+                        ppt_controller.execute({'action': 'exit', 'params': {}})
                         break
                 else:
                     print("❓ Không nhận dạng được lệnh")

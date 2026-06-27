@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Live Dashboard for Speech PowerPoint Controller — Real-time monitoring of voice commands, microphone status, and PowerPoint control.">
+    <title>Speech PowerPoint Controller — Live Dashboard</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎤</text></svg>">
+</head>
+<body>
+
+<div class="dashboard-wrapper">
+
+    <!-- ===================== HEADER ===================== -->
+    <header class="header" id="header">
+        <div class="header-left">
+            <div class="header-logo">🎤</div>
+            <div>
+                <div class="header-title">SPEECH POWERPOINT CONTROLLER</div>
+                <div class="header-subtitle">Live Dashboard — Real-time Monitoring</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="uptime-badge" id="uptime">00:00:00</div>
+            <div class="connection-badge" id="connection-badge">
+                <span class="connection-dot"></span>
+                <span id="connection-text">Disconnected</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===================== MAIN GRID ===================== -->
+    <div class="main-grid">
+
+        <!-- ========== LEFT: STATUS CARDS ========== -->
+        <div class="status-grid">
+
+            <!-- MICROPHONE STATUS -->
+            <div class="glass-card status-card" id="mic-card">
+                <div class="card-header">
+                    <span class="card-label">Microphone</span>
+                    <div class="card-icon mic">🎙️</div>
+                </div>
+                <div>
+                    <span class="status-indicator idle" id="mic-status">
+                        <span class="mic-pulse"></span>
+                        <span id="mic-status-text">Chờ kết nối</span>
+                    </span>
+                </div>
+                <div class="waveform" id="waveform">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+            </div>
+
+            <!-- POWERPOINT STATUS -->
+            <div class="glass-card status-card" id="ppt-card">
+                <div class="card-header">
+                    <span class="card-label">PowerPoint</span>
+                    <div class="card-icon ppt">📊</div>
+                </div>
+                <div>
+                    <span class="status-indicator disconnected" id="ppt-status">
+                        <span id="ppt-status-text">Chưa kết nối</span>
+                    </span>
+                </div>
+                <div class="card-detail" id="ppt-detail">—</div>
+            </div>
+
+            <!-- CURRENT COMMAND -->
+            <div class="glass-card status-card" id="cmd-card">
+                <div class="card-header">
+                    <span class="card-label">Current Command</span>
+                    <div class="card-icon cmd">🎯</div>
+                </div>
+                <div class="card-value" id="cmd-value">—</div>
+                <div class="card-detail" id="cmd-detail">Chưa có lệnh nào</div>
+            </div>
+
+            <!-- CURRENT SLIDE -->
+            <div class="glass-card status-card" id="slide-card">
+                <div class="card-header">
+                    <span class="card-label">Current Slide</span>
+                    <div class="card-icon slide">📑</div>
+                </div>
+                <div class="card-value" id="slide-value">— / —</div>
+                <div class="slide-progress-wrap">
+                    <div class="slide-progress-bar">
+                        <div class="slide-progress-fill" id="slide-progress"></div>
+                    </div>
+                    <div class="slide-progress-text">
+                        <span id="slide-progress-label">Chưa mở file</span>
+                        <span id="slide-progress-pct">0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== RIGHT: HISTORY + LOGS ========== -->
+        <div class="right-panels">
+
+            <!-- COMMAND HISTORY -->
+            <div class="glass-card command-history-panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span class="emoji">📋</span> Command History
+                    </div>
+                    <span class="panel-count" id="cmd-count">0</span>
+                </div>
+                <div class="command-history-list" id="command-history">
+                    <div class="empty-state" id="cmd-empty">
+                        <span class="emoji">🎤</span>
+                        <span>Chưa có lệnh nào được thực thi</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LOG PANEL -->
+            <div class="glass-card log-panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span class="emoji">📝</span> Log Panel
+                    </div>
+                    <span class="panel-count" id="log-count">0</span>
+                </div>
+                <div class="log-filters">
+                    <button class="log-filter-btn active" data-filter="all" id="filter-all">All</button>
+                    <button class="log-filter-btn" data-filter="info" id="filter-info">Info</button>
+                    <button class="log-filter-btn" data-filter="warning" id="filter-warning">Warning</button>
+                    <button class="log-filter-btn" data-filter="error" id="filter-error">Error</button>
+                </div>
+                <div class="log-list" id="log-list">
+                    <div class="empty-state" id="log-empty">
+                        <span class="emoji">📝</span>
+                        <span>Log sẽ hiển thị ở đây</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="footer">
+        <span>Speech PowerPoint Controller</span>
+        <span class="footer-divider"></span>
+        <span>SLP301m Project</span>
+        <span class="footer-divider"></span>
+        <span id="footer-status">Connecting...</span>
+    </footer>
+
+</div>
+
+<!-- ===================== SOCKET.IO + DASHBOARD JS ===================== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+<script>
+(function() {
+    'use strict';
+
+    // ========== DOM Elements ==========
+    const DOM = {
+        // Connection
+        connectionBadge: document.getElementById('connection-badge'),
+        connectionText: document.getElementById('connection-text'),
+        uptime: document.getElementById('uptime'),
+        footerStatus: document.getElementById('footer-status'),
+        // Mic
+        micCard: document.getElementById('mic-card'),
+        micStatus: document.getElementById('mic-status'),
+        micStatusText: document.getElementById('mic-status-text'),
+        waveform: document.getElementById('waveform'),
+        // PPT
+        pptCard: document.getElementById('ppt-card'),
+        pptStatus: document.getElementById('ppt-status'),
+        pptStatusText: document.getElementById('ppt-status-text'),
+        pptDetail: document.getElementById('ppt-detail'),
+        // Command
+        cmdCard: document.getElementById('cmd-card'),
+        cmdValue: document.getElementById('cmd-value'),
+        cmdDetail: document.getElementById('cmd-detail'),
+        // Slide
+        slideCard: document.getElementById('slide-card'),
+        slideValue: document.getElementById('slide-value'),
+        slideProgress: document.getElementById('slide-progress'),
+        slideProgressLabel: document.getElementById('slide-progress-label'),
+        slideProgressPct: document.getElementById('slide-progress-pct'),
+        // History
+        commandHistory: document.getElementById('command-history'),
+        cmdCount: document.getElementById('cmd-count'),
+        cmdEmpty: document.getElementById('cmd-empty'),
+        // Logs
+        logList: document.getElementById('log-list'),
+        logCount: document.getElementById('log-count'),
+        logEmpty: document.getElementById('log-empty'),
+    };
+
+    // ========== State ==========
+    let commandCount = 0;
+    let logCount = 0;
+    let currentLogFilter = 'all';
+    let startTime = null;
+    let uptimeInterval = null;
+    const MAX_HISTORY = 50;
+    const MAX_LOGS = 200;
+
+    // ========== Socket.IO Connection ==========
+    const socket = io();
+
+    socket.on('connect', () => {
+        DOM.connectionBadge.classList.add('connected');
+        DOM.connectionText.textContent = 'Connected';
+        DOM.footerStatus.textContent = 'Connected to server';
+        startTime = Date.now();
+        startUptime();
+        addLog('info', 'Dashboard connected to server');
+    });
+
+    socket.on('disconnect', () => {
+        DOM.connectionBadge.classList.remove('connected');
+        DOM.connectionText.textContent = 'Disconnected';
+        DOM.footerStatus.textContent = 'Connection lost';
+        stopUptime();
+        addLog('error', 'Dashboard disconnected from server');
+    });
+
+    // ========== Event Handlers ==========
+
+    // --- Microphone Status ---
+    socket.on('mic_status', (data) => {
+        // data: { status: 'listening'|'processing'|'idle'|'error', message?: string }
+        const status = data.status;
+        const message = data.message || '';
+
+        // Update status indicator
+        DOM.micStatus.className = 'status-indicator ' + status;
+
+        const statusMap = {
+            listening: '🎤 Đang nghe...',
+            processing: '🔄 Đang xử lý...',
+            idle: '⏸ Chờ',
+            error: '❌ Lỗi'
+        };
+        DOM.micStatusText.textContent = statusMap[status] || status;
+
+        // Waveform
+        if (status === 'listening') {
+            DOM.waveform.classList.add('active');
+            DOM.micCard.classList.add('glow-blue');
+        } else {
+            DOM.waveform.classList.remove('active');
+            DOM.micCard.classList.remove('glow-blue');
+        }
+
+        if (status === 'error') {
+            DOM.micCard.classList.add('glow-red');
+            setTimeout(() => DOM.micCard.classList.remove('glow-red'), 2000);
+        }
+    });
+
+    // --- PowerPoint Status ---
+    socket.on('ppt_status', (data) => {
+        // data: { status: 'disconnected'|'connected'|'file_opened'|'slideshow', detail?: string }
+        const status = data.status;
+        const detail = data.detail || '';
+
+        const classMap = {
+            disconnected: 'disconnected',
+            connected: 'connected',
+            file_opened: 'connected',
+            slideshow: 'slideshow',
+            waiting: 'connected'
+        };
+        const textMap = {
+            disconnected: 'Chưa kết nối',
+            connected: 'Đã mở PowerPoint',
+            file_opened: 'Đã mở file',
+            slideshow: '▶ Đang trình chiếu',
+            waiting: '🔍 Chờ chọn file'
+        };
+
+        DOM.pptStatus.className = 'status-indicator ' + (classMap[status] || 'disconnected');
+        DOM.pptStatusText.textContent = textMap[status] || status;
+        DOM.pptDetail.textContent = detail || '—';
+
+        if (status === 'slideshow') {
+            DOM.pptCard.classList.add('glow-purple');
+        } else {
+            DOM.pptCard.classList.remove('glow-purple');
+        }
+    });
+
+    // --- Current Command ---
+    socket.on('current_command', (data) => {
+        // data: { raw_text: string, action: string, success: boolean, message: string }
+        DOM.cmdValue.textContent = data.raw_text || '—';
+
+        let detailParts = [];
+        if (data.action) detailParts.push('⚡ ' + data.action);
+        if (data.message) detailParts.push((data.success ? '✅ ' : '❌ ') + data.message);
+        DOM.cmdDetail.textContent = detailParts.join(' — ') || 'Chưa có lệnh nào';
+
+        // Flash animation
+        DOM.cmdValue.classList.remove('flash-success', 'flash-fail');
+        void DOM.cmdValue.offsetWidth; // trigger reflow
+        DOM.cmdValue.classList.add(data.success ? 'flash-success' : 'flash-fail');
+
+        // Card glow
+        DOM.cmdCard.classList.remove('glow-green', 'glow-red');
+        DOM.cmdCard.classList.add(data.success ? 'glow-green' : 'glow-red');
+        setTimeout(() => DOM.cmdCard.classList.remove('glow-green', 'glow-red'), 1500);
+
+        // Add to history
+        addCommandHistory(data);
+    });
+
+    // --- Current Slide ---
+    socket.on('current_slide', (data) => {
+        // data: { current: number, total: number }
+        const cur = data.current || 0;
+        const total = data.total || 0;
+
+        if (total > 0) {
+            DOM.slideValue.textContent = cur + ' / ' + total;
+            const pct = Math.round((cur / total) * 100);
+            DOM.slideProgress.style.width = pct + '%';
+            DOM.slideProgressLabel.textContent = 'Slide ' + cur;
+            DOM.slideProgressPct.textContent = pct + '%';
+            DOM.slideCard.classList.add('glow-green');
+        } else {
+            DOM.slideValue.textContent = '— / —';
+            DOM.slideProgress.style.width = '0%';
+            DOM.slideProgressLabel.textContent = 'Chưa mở file';
+            DOM.slideProgressPct.textContent = '0%';
+            DOM.slideCard.classList.remove('glow-green');
+        }
+    });
+
+    // --- Log Entry ---
+    socket.on('log_entry', (data) => {
+        // data: { level: 'info'|'warning'|'error'|'debug', message: string, timestamp?: string }
+        addLog(data.level, data.message, data.timestamp);
+    });
+
+    // --- Command History (batch on reconnect) ---
+    socket.on('command_history', (data) => {
+        // data: { entries: [ {raw_text, action, success, message, timestamp}, ... ] }
+        if (data.entries) {
+            data.entries.forEach(entry => addCommandHistory(entry, true));
+        }
+    });
+
+    // ========== UI Functions ==========
+
+    function addCommandHistory(data, skipAnimation) {
+        if (DOM.cmdEmpty) {
+            DOM.cmdEmpty.remove();
+        }
+
+        commandCount++;
+        DOM.cmdCount.textContent = commandCount;
+
+        const entry = document.createElement('div');
+        entry.className = 'command-entry';
+        if (skipAnimation) entry.style.animation = 'none';
+
+        const time = data.timestamp || new Date().toLocaleTimeString('vi-VN');
+        const statusClass = data.success === true ? 'success' : (data.success === false ? 'fail' : 'unknown');
+        const statusIcon = data.success === true ? '✓' : (data.success === false ? '✗' : '?');
+
+        entry.innerHTML = `
+            <div class="cmd-status-icon ${statusClass}">${statusIcon}</div>
+            <div class="cmd-content">
+                <div class="cmd-text">"${escapeHtml(data.raw_text || '—')}"</div>
+                <div class="cmd-action">${escapeHtml(data.action || 'unknown')}</div>
+            </div>
+            <div class="cmd-time">${escapeHtml(time)}</div>
+        `;
+
+        DOM.commandHistory.prepend(entry);
+
+        // Limit entries
+        while (DOM.commandHistory.children.length > MAX_HISTORY) {
+            DOM.commandHistory.lastElementChild.remove();
+        }
+    }
+
+    function addLog(level, message, timestamp) {
+        if (DOM.logEmpty) {
+            DOM.logEmpty.remove();
+        }
+
+        logCount++;
+        DOM.logCount.textContent = logCount;
+
+        const entry = document.createElement('div');
+        entry.className = 'log-entry ' + level;
+        entry.dataset.level = level;
+
+        const time = timestamp || new Date().toLocaleTimeString('vi-VN');
+
+        entry.innerHTML = `
+            <span class="log-time">${escapeHtml(time)}</span>
+            <span class="log-level">${level.toUpperCase()}</span>
+            <span class="log-msg">${escapeHtml(message)}</span>
+        `;
+
+        // Apply filter
+        if (currentLogFilter !== 'all' && currentLogFilter !== level) {
+            entry.style.display = 'none';
+        }
+
+        DOM.logList.appendChild(entry);
+
+        // Auto-scroll
+        DOM.logList.scrollTop = DOM.logList.scrollHeight;
+
+        // Limit entries
+        while (DOM.logList.children.length > MAX_LOGS) {
+            DOM.logList.firstElementChild.remove();
+        }
+    }
+
+    // ========== Log Filters ==========
+    document.querySelectorAll('.log-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.log-filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentLogFilter = btn.dataset.filter;
+
+            DOM.logList.querySelectorAll('.log-entry').forEach(entry => {
+                if (currentLogFilter === 'all' || entry.dataset.level === currentLogFilter) {
+                    entry.style.display = '';
+                } else {
+                    entry.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // ========== Uptime Timer ==========
+    function startUptime() {
+        stopUptime();
+        uptimeInterval = setInterval(() => {
+            if (!startTime) return;
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const h = String(Math.floor(elapsed / 3600)).padStart(2, '0');
+            const m = String(Math.floor((elapsed % 3600) / 60)).padStart(2, '0');
+            const s = String(elapsed % 60).padStart(2, '0');
+            DOM.uptime.textContent = h + ':' + m + ':' + s;
+        }, 1000);
+    }
+
+    function stopUptime() {
+        if (uptimeInterval) {
+            clearInterval(uptimeInterval);
+            uptimeInterval = null;
+        }
+    }
+
+    // ========== Utility ==========
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.appendChild(document.createTextNode(str));
+        return div.innerHTML;
+    }
+
+})();
+</script>
+
+</body>
+</html>

@@ -140,14 +140,17 @@ class PowerPointController:
         print("DANH SÁCH FILE POWERPOINT")
         print("=" * 60)
 
+        file_list = []
         for i, file in enumerate(self.available_files, start=1):
             print(f"{i}. {file.name}")
+            file_list.append(f"{i}. {file.name}")
 
         print("=" * 60)
 
+        file_list_str = "\n".join(file_list)
         return {
             "success": True,
-            "message": "Hãy nói số thứ tự để chọn file."
+            "message": f"Tìm thấy {len(self.available_files)} file. Hãy nói số để chọn:\n{file_list_str}"
         }
     
 

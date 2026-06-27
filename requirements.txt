@@ -1,14 +1,14 @@
-# Speech PowerPoint Controller - Requirements
+﻿# Speech PowerPoint Controller - Requirements
 # Các thư viện cần thiết cho dự án
 
 # Nhận dạng giọng nói
 SpeechRecognition==3.10.1
 
-# Hỗ trợ microphone
-PyAudio==0.2.14
+# Hỗ trợ microphone (cài riêng nếu lỗi — xem USER_GUIDE.md)
+# PyAudio==0.2.14
 
 # Điều khiển PowerPoint trên Windows
-pywin32==307
+pywin32>=311
 
 # Xử lý âm thanh (alternative cho PyAudio nếu cài đặt gặp vấn đề)
 # sounddevice==0.4.6
@@ -16,3 +16,7 @@ pywin32==307
 
 standard-aifc
 standard-distutils
+
+# Dashboard web server
+flask==3.1.1
+flask-socketio==5.5.1
